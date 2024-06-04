@@ -1,10 +1,14 @@
-import cv2
 import os
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn.functional as F
+from diff_gaussian_rasterization import GaussianRasterizer as Renderer
+from pytorch_msssim import ms_ssim
+from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from tqdm import tqdm
-import numpy as np
-import matplotlib.pyplot as plt
 
 from datasets.gradslam_datasets.geometryutils import relative_transformation
 from utils.recon_helpers import setup_camera
@@ -16,11 +20,6 @@ from utils.slam_helpers import (
     quat_mult,
     matrix_to_quaternion,
 )
-
-from diff_gaussian_rasterization import GaussianRasterizer as Renderer
-
-from pytorch_msssim import ms_ssim
-from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 
 loss_fn_alex = LearnedPerceptualImagePatchSimilarity(
     net_type="alex", normalize=True

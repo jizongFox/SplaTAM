@@ -1,7 +1,6 @@
 import glob
 import os
-from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Optional
 
 import cv2
 import imageio.v2 as imageio

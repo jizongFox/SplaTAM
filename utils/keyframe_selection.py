@@ -3,8 +3,8 @@ Code for Keyframe Selection based on re-projection of points from
 the current frame to the keyframes.
 """
 
-import torch
 import numpy as np
+import torch
 
 
 def get_pointcloud(depth, intrinsics, w2c, sampled_indices):

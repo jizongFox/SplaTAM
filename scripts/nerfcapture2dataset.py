@@ -5,12 +5,12 @@ https://github.com/NVlabs/instant-ngp/blob/master/scripts/nerfcapture2nerf.py
 #!/usr/bin/env python3
 
 import argparse
+import json
 import os
 import shutil
 import sys
-from pathlib import Path
-import json
 from importlib.machinery import SourceFileLoader
+from pathlib import Path
 
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

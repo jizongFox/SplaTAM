@@ -1,6 +1,3 @@
-import os
-from os.path import join as p_join
-
 primary_device = "cuda:0"
 
 scenes = [

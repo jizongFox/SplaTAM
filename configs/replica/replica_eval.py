@@ -1,5 +1,4 @@
 import os
-from os.path import join as p_join
 
 scenes = [
     "room0",

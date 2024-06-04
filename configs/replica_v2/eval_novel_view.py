@@ -1,6 +1,3 @@
-import os
-from os.path import join as p_join
-
 scenes = [
     "room_0",
     "room_1",

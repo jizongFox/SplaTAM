@@ -8,21 +8,15 @@ A few parts of this code are adapted from NICE-SLAM
 https://github.com/cvg/nice-slam/blob/645b53af3dc95b4b348de70e759943f7228a61ca/src/utils/datasets.py
 """
 
-import abc
-import glob
-import os
-from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 import cv2
 import imageio
 import numpy as np
 import torch
-import yaml
-from natsort import natsorted
 
-from .geometryutils import relative_transformation
 from . import datautils
+from .geometryutils import relative_transformation
 
 
 def to_scalar(inp: Union[np.ndarray, torch.Tensor, float]) -> Union[int, float]:

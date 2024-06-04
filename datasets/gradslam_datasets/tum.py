@@ -1,12 +1,8 @@
-import glob
 import os
-from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Optional
 
 import numpy as np
 import torch
-from torch.utils import data
-from natsort import natsorted
 
 from .basedataset import GradSLAMDataset
 

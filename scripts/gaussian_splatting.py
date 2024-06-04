@@ -1,8 +1,8 @@
 import argparse
 import os
 import random
-import sys
 import shutil
+import sys
 from importlib.machinery import SourceFileLoader
 
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -13,7 +13,6 @@ print("System Paths:")
 for p in sys.path:
     print(p)
 
-import cv2
 import numpy as np
 import torch
 from tqdm import tqdm

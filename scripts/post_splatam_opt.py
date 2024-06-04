@@ -1,8 +1,8 @@
 import argparse
 import os
 import random
-import sys
 import shutil
+import sys
 from importlib.machinery import SourceFileLoader
 
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

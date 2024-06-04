@@ -6,20 +6,19 @@ https://github.com/NVlabs/instant-ngp/blob/master/scripts/nerfcapture2nerf.py
 #!/usr/bin/env python3
 
 import argparse
+import json
 import os
 import shutil
 import sys
 import time
-from pathlib import Path
-import json
 from importlib.machinery import SourceFileLoader
+from pathlib import Path
 
 _BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, _BASE_DIR)
 
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -40,8 +39,6 @@ from scripts.splatam import (
     get_pointcloud,
     add_new_gaussians,
 )
-
-from diff_gaussian_rasterization import GaussianRasterizer as Renderer
 
 import cyclonedds.idl as idl
 import cyclonedds.idl.annotations as annotate

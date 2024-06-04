@@ -1,18 +1,17 @@
 import os
+
+import matplotlib.pyplot as plt
+import numpy as np
 import open3d as o3d
 import torch
 import torch.nn.functional as F
-import numpy as np
-import matplotlib.pyplot as plt
+from diff_gaussian_rasterization import GaussianRasterizer as Renderer
+from pytorch_msssim import ms_ssim
+from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 from tqdm import tqdm
 
 from utils.recon_helpers import setup_camera
 from utils.slam_external import build_rotation, calc_psnr
-
-from diff_gaussian_rasterization import GaussianRasterizer as Renderer
-
-from pytorch_msssim import ms_ssim
-from torchmetrics.image.lpip import LearnedPerceptualImagePatchSimilarity
 
 loss_fn_alex = LearnedPerceptualImagePatchSimilarity(
     net_type="alex", normalize=True

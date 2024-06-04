@@ -15,11 +15,12 @@
 #######################################################################################################################
 """
 
+from math import exp
+
 import numpy as np
 import torch
 import torch.nn.functional as func
 from torch.autograd import Variable
-from math import exp
 
 
 def build_rotation(q):

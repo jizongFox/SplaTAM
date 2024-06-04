@@ -20,9 +20,20 @@ import torch
 from tqdm import tqdm
 import wandb
 
-from datasets.gradslam_datasets import (load_dataset_config, ICLDataset, ReplicaDataset, ReplicaV2Dataset, AzureKinectDataset,
-                                        ScannetDataset, Ai2thorDataset, Record3DDataset, RealsenseDataset, TUMDataset,
-                                        ScannetPPDataset, NeRFCaptureDataset)
+from datasets.gradslam_datasets import (
+    load_dataset_config,
+    ICLDataset,
+    ReplicaDataset,
+    ReplicaV2Dataset,
+    AzureKinectDataset,
+    ScannetDataset,
+    Ai2thorDataset,
+    Record3DDataset,
+    RealsenseDataset,
+    TUMDataset,
+    ScannetPPDataset,
+    NeRFCaptureDataset,
+)
 from utils.common_utils import seed_everything
 from utils.eval_helpers import eval, eval_nvs
 
@@ -56,11 +67,14 @@ def get_dataset(config_dict, basedir, sequence, **kwargs):
 
 def load_scene_data(scene_path):
     params = dict(np.load(scene_path, allow_pickle=True))
-    params = {k: torch.tensor(params[k]).cuda().float().requires_grad_(True) for k in params.keys()}
+    params = {
+        k: torch.tensor(params[k]).cuda().float().requires_grad_(True)
+        for k in params.keys()
+    }
     return params
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("experiment", type=str, help="Path to experiment file")
@@ -74,14 +88,14 @@ if __name__=="__main__":
     config = experiment.config
 
     # Set Experiment Seed
-    seed_everything(seed=experiment.config['seed'])
+    seed_everything(seed=experiment.config["seed"])
     device = torch.device(config["primary_device"])
 
     # Create Results Directory and Copy Config
     results_dir = os.path.join(
         experiment.config["workdir"], experiment.config["run_name"]
     )
-    if not experiment.config['load_checkpoint']:
+    if not experiment.config["load_checkpoint"]:
         os.makedirs(results_dir, exist_ok=True)
         shutil.copy(args.experiment, os.path.join(results_dir, "config.py"))
 
@@ -116,50 +130,86 @@ if __name__=="__main__":
     if num_frames == -1:
         num_frames = len(dataset)
 
-    scene_path = config['scene_path']
+    scene_path = config["scene_path"]
     params = load_scene_data(scene_path)
 
-    if dataset_config['use_train_split']:
+    if dataset_config["use_train_split"]:
         eval_dir = os.path.join(results_dir, "eval_train")
-        wandb_name = config['wandb']['name'] + "_Train_Split"
+        wandb_name = config["wandb"]["name"] + "_Train_Split"
     else:
         eval_dir = os.path.join(results_dir, "eval_nvs")
-        wandb_name = config['wandb']['name'] + "_NVS_Split"
-    
+        wandb_name = config["wandb"]["name"] + "_NVS_Split"
+
     # Init WandB
-    if config['use_wandb']:
+    if config["use_wandb"]:
         wandb_time_step = 0
         wandb_tracking_step = 0
         wandb_mapping_step = 0
-        wandb_run = wandb.init(project=config['wandb']['project'],
-                               entity=config['wandb']['entity'],
-                               group=config['wandb']['group'],
-                               name=wandb_name,
-                               config=config)
+        wandb_run = wandb.init(
+            project=config["wandb"]["project"],
+            entity=config["wandb"]["entity"],
+            group=config["wandb"]["group"],
+            name=wandb_name,
+            config=config,
+        )
 
     # Evaluate Final Parameters
     with torch.no_grad():
-        if config['use_wandb']:
-            if dataset_config['use_train_split']:
-                eval(dataset, params, num_frames, eval_dir, sil_thres=config['mapping']['sil_thres'],
-                    wandb_run=wandb_run, wandb_save_qual=config['wandb']['eval_save_qual'],
-                    mapping_iters=config['mapping']['num_iters'], add_new_gaussians=config['mapping']['add_new_gaussians'],
-                    eval_every=config['eval_every'], save_frames=True)
+        if config["use_wandb"]:
+            if dataset_config["use_train_split"]:
+                eval(
+                    dataset,
+                    params,
+                    num_frames,
+                    eval_dir,
+                    sil_thres=config["mapping"]["sil_thres"],
+                    wandb_run=wandb_run,
+                    wandb_save_qual=config["wandb"]["eval_save_qual"],
+                    mapping_iters=config["mapping"]["num_iters"],
+                    add_new_gaussians=config["mapping"]["add_new_gaussians"],
+                    eval_every=config["eval_every"],
+                    save_frames=True,
+                )
             else:
-                eval_nvs(dataset, params, num_frames, eval_dir, sil_thres=config['mapping']['sil_thres'],
-                    wandb_run=wandb_run, wandb_save_qual=config['wandb']['eval_save_qual'],
-                    mapping_iters=config['mapping']['num_iters'], add_new_gaussians=config['mapping']['add_new_gaussians'],
-                    eval_every=config['eval_every'], save_frames=True)
+                eval_nvs(
+                    dataset,
+                    params,
+                    num_frames,
+                    eval_dir,
+                    sil_thres=config["mapping"]["sil_thres"],
+                    wandb_run=wandb_run,
+                    wandb_save_qual=config["wandb"]["eval_save_qual"],
+                    mapping_iters=config["mapping"]["num_iters"],
+                    add_new_gaussians=config["mapping"]["add_new_gaussians"],
+                    eval_every=config["eval_every"],
+                    save_frames=True,
+                )
         else:
-            if dataset_config['use_train_split']:
-                eval(dataset, params, num_frames, eval_dir, sil_thres=config['mapping']['sil_thres'],
-                    mapping_iters=config['mapping']['num_iters'], add_new_gaussians=config['mapping']['add_new_gaussians'],
-                    eval_every=config['eval_every'], save_frames=True)
+            if dataset_config["use_train_split"]:
+                eval(
+                    dataset,
+                    params,
+                    num_frames,
+                    eval_dir,
+                    sil_thres=config["mapping"]["sil_thres"],
+                    mapping_iters=config["mapping"]["num_iters"],
+                    add_new_gaussians=config["mapping"]["add_new_gaussians"],
+                    eval_every=config["eval_every"],
+                    save_frames=True,
+                )
             else:
-                eval_nvs(dataset, params, num_frames, eval_dir, sil_thres=config['mapping']['sil_thres'],
-                    mapping_iters=config['mapping']['num_iters'], add_new_gaussians=config['mapping']['add_new_gaussians'],
-                    eval_every=config['eval_every'], save_frames=True)
-    
+                eval_nvs(
+                    dataset,
+                    params,
+                    num_frames,
+                    eval_dir,
+                    sil_thres=config["mapping"]["sil_thres"],
+                    mapping_iters=config["mapping"]["num_iters"],
+                    add_new_gaussians=config["mapping"]["add_new_gaussians"],
+                    eval_every=config["eval_every"],
+                    save_frames=True,
+                )
+
     # Close WandB
-    if config['use_wandb']:
+    if config["use_wandb"]:
         wandb_run.finish()
